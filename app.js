@@ -316,10 +316,13 @@ function bindEvents() {
     els.saveState.textContent = "글감 씨앗을 보관했어요";
   });
 
+  document.addEventListener("selectionchange", rememberAnySelectedSentence);
+
   els.saveSentenceBtn.addEventListener("mousedown", (event) => {
     event.preventDefault();
-    rememberSelectedSentence();
+    rememberAnySelectedSentence();
   });
+  els.saveSentenceBtn.addEventListener("touchstart", rememberAnySelectedSentence, { passive: true });
   els.saveSentenceBtn.addEventListener("click", saveSelectedSentence);
   els.helperTools.addEventListener("click", handleMemoryHelper);
   els.exportMarkdownBtn.addEventListener("click", exportMarkdown);
@@ -346,6 +349,7 @@ function bindEvents() {
   els.entryBody.addEventListener("select", rememberSelectedSentence);
   els.entryBody.addEventListener("keyup", rememberSelectedSentence);
   els.entryBody.addEventListener("mouseup", rememberSelectedSentence);
+  els.entryBody.addEventListener("touchend", rememberSelectedSentence);
 
   els.entryTitle.addEventListener("input", () => {
     els.saveState.textContent = "기록 작성 중";
@@ -360,6 +364,7 @@ function bindEvents() {
   els.recordList.addEventListener("click", handleRecordAction);
   els.recordList.addEventListener("mouseup", rememberSelectedRecordSentence);
   els.recordList.addEventListener("keyup", rememberSelectedRecordSentence);
+  els.recordList.addEventListener("touchend", rememberSelectedRecordSentence);
   els.calendarGrid.addEventListener("click", handleCalendarClick);
   els.promptLibrary.addEventListener("click", handleVaultDelete);
   els.sentenceLibrary.addEventListener("click", handleVaultDelete);
@@ -427,9 +432,8 @@ function saveEntry() {
 }
 
 function saveSelectedSentence() {
-  rememberSelectedSentence();
-  rememberSelectedRecordSentence();
-  const selected = lastSelectedSentence;
+  rememberAnySelectedSentence();
+  const selected = getCurrentSelectedSentence();
 
   if (!selected) {
     els.saveState.textContent = "작성 중인 글이나 저장된 글에서 문장 씨앗으로 남길 문장을 선택해 주세요";
@@ -453,6 +457,7 @@ function saveSelectedSentence() {
 }
 
 function rememberSelectedSentence() {
+  if (document.activeElement !== els.entryBody && !isTextAreaSelectionAvailable()) return;
   const selected = els.entryBody.value
     .slice(els.entryBody.selectionStart, els.entryBody.selectionEnd)
     .trim();
@@ -468,6 +473,38 @@ function rememberSelectedRecordSentence() {
   if (selection) {
     lastSelectedSentence = selection;
   }
+}
+
+function rememberAnySelectedSentence() {
+  const selected = getCurrentSelectedSentence();
+  if (selected) {
+    lastSelectedSentence = selected;
+  }
+}
+
+function getCurrentSelectedSentence() {
+  const textareaSelection = getTextareaSelection();
+  if (textareaSelection) return textareaSelection;
+
+  const pageSelection = window.getSelection?.().toString().trim();
+  if (pageSelection) return pageSelection;
+
+  return lastSelectedSentence;
+}
+
+function getTextareaSelection() {
+  if (!isTextAreaSelectionAvailable()) return "";
+  return els.entryBody.value
+    .slice(els.entryBody.selectionStart, els.entryBody.selectionEnd)
+    .trim();
+}
+
+function isTextAreaSelectionAvailable() {
+  return (
+    typeof els.entryBody.selectionStart === "number" &&
+    typeof els.entryBody.selectionEnd === "number" &&
+    els.entryBody.selectionEnd > els.entryBody.selectionStart
+  );
 }
 
 function handleRecordAction(event) {
@@ -538,7 +575,8 @@ function exitEditMode() {
 }
 
 function saveSentenceFromSelection(entry) {
-  const selected = lastSelectedSentence;
+  rememberAnySelectedSentence();
+  const selected = getCurrentSelectedSentence();
 
   if (!selected) {
     els.exportState.textContent = "글 본문에서 보관할 문장을 드래그해 선택해 주세요";
