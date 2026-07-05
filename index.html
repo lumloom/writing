@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>하루문장</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">ㅎ</div>
+          <div>
+            <h1>하루문장</h1>
+            <p>매일 작은 기억을 글로 남기는 곳</p>
+          </div>
+        </div>
+
+        <nav class="nav-tabs" aria-label="주요 화면">
+          <button class="nav-tab active" data-view="write" type="button">오늘의 기억</button>
+          <button class="nav-tab" data-view="records" type="button">기록</button>
+          <button class="nav-tab" data-view="vault" type="button">보관함</button>
+          <button class="nav-tab" data-view="stats" type="button">루틴</button>
+        </nav>
+
+        <section class="routine-card" aria-label="오늘의 루틴">
+          <span>연속 작성</span>
+          <strong id="streakCount">0일</strong>
+          <p id="routineMessage">오늘 첫 씨앗을 심어보세요.</p>
+        </section>
+      </aside>
+
+      <main class="main">
+        <section class="view active" id="writeView">
+          <header class="section-header">
+            <div>
+              <span class="eyebrow" id="todayLabel">오늘</span>
+              <h2>오늘의 기억</h2>
+            </div>
+            <div class="header-actions">
+              <button class="ghost-button" id="newDraftBtn" type="button">새 글쓰기</button>
+              <button class="ghost-button" id="newPromptBtn" type="button">다른 기억 꺼내기</button>
+              <button class="ghost-button" id="freeWriteBtn" type="button">자유 글쓰기</button>
+              <button class="ghost-button hidden" id="cancelEditBtn" type="button">수정 취소</button>
+            </div>
+          </header>
+
+          <section class="prompt-panel" aria-label="오늘의 기억 글감">
+            <div>
+              <span id="promptCategory">기억 · 오늘</span>
+              <p id="currentPrompt">오늘 가장 오래 본 물건은?</p>
+              <em id="promptHint">책상 위, 손에 든 것, 화면 속 물건처럼 오늘 오래 머문 대상을 떠올려보세요.</em>
+            </div>
+            <button class="small-button" id="savePromptBtn" type="button">글감 씨앗</button>
+          </section>
+
+          <section class="writing-guide" aria-label="글쓰기 힌트">
+            <div>
+              <span>첫 문장 예시</span>
+              <p id="starterSentence">생각해보니 오늘 가장 오래 바라본 것은 의외로...</p>
+            </div>
+          </section>
+
+          <form class="editor" id="entryForm">
+            <label>
+              <span>제목</span>
+              <input id="entryTitle" type="text" placeholder="제목을 적어주세요" autocomplete="off" />
+            </label>
+            <label class="body-label">
+              <span>본문</span>
+              <textarea id="entryBody" placeholder="떠오르는 만큼만 적어도 좋아요. 물건 하나, 냄새 하나, 짧은 장면 하나에서 시작해보세요."></textarea>
+            </label>
+            <p class="coach-message" id="coachMessage">떠오르는 단어 하나만 적어도 괜찮아요.</p>
+            <section class="helper-tools" aria-label="기억 도우미">
+              <button type="button" data-helper-action="continue">💡 기억 이어가기 <span>기억 도우미</span></button>
+              <button type="button" data-helper-action="more">🌱 한 가지 더 떠올려보기 <span>기억 도우미</span></button>
+              <button type="button" data-helper-action="sentence">✨ 오늘의 문장 뽑기 <span>기억 도우미</span></button>
+              <button type="button" data-helper-action="title">✎ 제목 씨앗 <span>기억 도우미</span></button>
+            </section>
+            <section class="helper-result hidden" id="helperResult" aria-live="polite"></section>
+            <div class="editor-footer">
+              <div class="editor-meta">
+                <span id="wordCount">0자</span>
+                <span id="saveState">저장 전</span>
+              </div>
+              <div class="footer-actions">
+                <button class="ghost-button" id="saveSentenceBtn" type="button">문장 씨앗</button>
+                <button class="primary-button" id="entrySubmitBtn" type="submit">오늘 기록하기</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section class="view" id="recordsView">
+          <header class="section-header">
+            <div>
+              <span class="eyebrow">내 기록</span>
+              <h2>날짜별 기억 기록</h2>
+            </div>
+            <div class="header-actions">
+              <input class="search-input" id="recordSearch" type="search" placeholder="제목, 기억, 본문 검색" />
+              <button class="ghost-button hidden" id="clearDateFilterBtn" type="button">날짜 필터 해제</button>
+              <button class="ghost-button" id="exportMarkdownBtn" type="button">Markdown 저장</button>
+              <span class="export-state" id="exportState" aria-live="polite"></span>
+            </div>
+          </header>
+          <p class="filter-state" id="recordFilterState"></p>
+          <div class="record-layout">
+            <section class="calendar" id="calendarGrid" aria-label="이번 달 작성 기록"></section>
+            <section class="record-list" id="recordList" aria-label="작성한 글 목록"></section>
+          </div>
+        </section>
+
+        <section class="view" id="vaultView">
+          <header class="section-header">
+            <div>
+              <span class="eyebrow">씨앗 보관함</span>
+              <h2>다시 꺼내고 싶은 것들</h2>
+            </div>
+          </header>
+          <div class="vault-layout">
+            <section>
+              <h3>글감 씨앗</h3>
+              <div class="prompt-library" id="promptLibrary"></div>
+            </section>
+            <section>
+              <h3>문장 씨앗</h3>
+              <div class="sentence-library" id="sentenceLibrary"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="statsView">
+          <header class="section-header">
+            <div>
+              <span class="eyebrow">쓰기 루틴</span>
+              <h2>기록 루틴 살펴보기</h2>
+            </div>
+          </header>
+          <div class="stats-grid">
+            <article>
+              <span>총 기록</span>
+              <strong id="totalEntries">0편</strong>
+            </article>
+            <article>
+              <span>오늘 작성</span>
+              <strong id="todayEntries">0편</strong>
+            </article>
+            <article>
+              <span>이번 달</span>
+              <strong id="monthEntries">0편</strong>
+            </article>
+            <article>
+              <span>총 글자 수</span>
+              <strong id="totalChars">0자</strong>
+            </article>
+            <article>
+              <span>자주 꺼낸 기억</span>
+              <strong id="favoriteCategory">아직 없음</strong>
+            </article>
+            <article>
+              <span>보관한 문장</span>
+              <strong id="savedSentences">0개</strong>
+            </article>
+          </div>
+          <section class="memory-dex" aria-label="기억 도감">
+            <h3>기억 도감</h3>
+            <div id="memoryDexList"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="./src/data/memorySeeds.js"></script>
+    <script src="./src/data/questionTemplates.js"></script>
+    <script src="./src/data/keywordDictionary.js"></script>
+    <script src="./src/engines/promptGenerator.js"></script>
+    <script src="./src/engines/sentencePicker.js"></script>
+    <script src="./src/engines/tagEngine.js"></script>
+    <script src="./src/engines/writingCoach.js"></script>
+    <script src="./src/engines/memoryDex.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
