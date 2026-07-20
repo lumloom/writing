@@ -2,7 +2,8 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#fbfaf7" />
     <title>하루문장</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -171,6 +172,25 @@
         </section>
       </main>
     </div>
+
+    <nav class="bottom-tabs" aria-label="주요 화면">
+      <button class="nav-tab active" data-view="write" type="button">
+        <span class="tab-icon" aria-hidden="true">✍️</span>
+        <span class="tab-label">오늘</span>
+      </button>
+      <button class="nav-tab" data-view="records" type="button">
+        <span class="tab-icon" aria-hidden="true">📅</span>
+        <span class="tab-label">기록</span>
+      </button>
+      <button class="nav-tab" data-view="vault" type="button">
+        <span class="tab-icon" aria-hidden="true">🗂️</span>
+        <span class="tab-label">보관함</span>
+      </button>
+      <button class="nav-tab" data-view="stats" type="button">
+        <span class="tab-icon" aria-hidden="true">📈</span>
+        <span class="tab-label">루틴</span>
+      </button>
+    </nav>
 
     <script src="./src/data/memorySeeds.js"></script>
     <script src="./src/data/questionTemplates.js"></script>
