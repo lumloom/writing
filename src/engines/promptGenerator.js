@@ -24,22 +24,21 @@
   function generatePrompts() {
     const seeds = window.HaruMemory.memorySeeds || [];
     const questions = window.HaruMemory.questionTemplates || [];
-    const starters = window.HaruMemory.starterTemplates || [];
+    const hints = window.HaruMemory.hintTemplates || [];
 
     return seeds.map((seed, index) => {
       const questionTemplate = questions[index % questions.length];
-      const starterTemplate = starters[index % starters.length];
       return {
         id: seed.id,
         seed,
-        mode: "기억",
+        mode: "글감",
         category: seed.category,
+        subcategory: seed.subcategory,
         keyword: seed.keyword,
         difficulty: seed.difficulty,
         tags: seed.tags,
         text: fillTemplate(questionTemplate, seed),
-        hint: `${seed.keyword}와 연결된 사람, 장소, 냄새, 소리 중 하나만 골라 적어도 좋아요.`,
-        starter: fillTemplate(starterTemplate, seed)
+        hint: hints[index % hints.length]
       };
     });
   }
@@ -49,8 +48,10 @@
     return prompts[seed % prompts.length];
   }
 
-  function randomPrompt(prompts, exceptKey) {
-    const candidates = prompts.filter((prompt) => prompt.id !== exceptKey && prompt.text !== exceptKey);
+  function randomPrompt(prompts, exceptKey, category = "all") {
+    const pool = category === "all" ? prompts : prompts.filter((prompt) => prompt.category === category);
+    const candidates = pool.filter((prompt) => prompt.id !== exceptKey && prompt.text !== exceptKey);
+    if (!candidates.length) return pool[0] || prompts[0];
     return candidates[Math.floor(Math.random() * candidates.length)];
   }
 

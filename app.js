@@ -4,212 +4,166 @@ const legacyPrompts = [
     category: "오늘",
     text: "오늘 가장 오래 본 물건은?",
     hint: "책상 위, 손에 든 것, 화면 속 물건처럼 오늘 오래 머문 대상을 떠올려보세요.",
-    starter: "생각해보니 오늘 가장 오래 바라본 것은 의외로..."
   },
   {
     mode: "기억",
     category: "어린 시절",
     text: "어릴 때 가장 좋아했던 과자는?",
     hint: "맛보다 먼저 떠오르는 포장지, 사 먹던 장소, 같이 먹던 사람을 적어보세요.",
-    starter: "그 과자를 보면 아직도 어린 시절이 떠오른다."
   },
   {
     mode: "기억",
     category: "물건",
     text: "집에서 가장 오래된 물건은?",
     hint: "언제부터 있었는지 몰라도 계속 자리를 지키고 있는 물건을 찾아보세요.",
-    starter: "우리 집에서 가장 오래된 물건은 늘 같은 자리에 있었다."
   },
   {
     mode: "감각",
     category: "냄새",
     text: "오늘 가장 기억나는 냄새는?",
     hint: "음식, 비누, 길거리, 방 안 공기처럼 오늘 코끝에 남은 냄새를 골라보세요.",
-    starter: "오늘 가장 오래 남은 냄새는 생각보다 선명했다."
   },
   {
     mode: "기억",
     category: "학교",
     text: "초등학교 운동장에서 가장 먼저 떠오르는 장면은?",
     hint: "운동장의 색, 소리, 쉬는 시간, 줄 서 있던 장면 중 하나만 잡아보세요.",
-    starter: "초등학교 운동장을 떠올리면 가장 먼저 보이는 장면이 있다."
   },
   {
     mode: "기억",
     category: "집",
     text: "냉장고를 열면 가장 먼저 보이는 것은?",
     hint: "지금 냉장고 안을 떠올리고, 그 물건이 왜 거기 있는지 이어 써보세요.",
-    starter: "냉장고 문을 열면 가장 먼저 눈에 들어오는 것은..."
   },
   {
     mode: "기억",
     category: "말",
     text: "어릴 때 가장 많이 들었던 말은?",
     hint: "칭찬이어도, 잔소리여도 괜찮아요. 그 말을 듣던 장면부터 적어보세요.",
-    starter: "어릴 때 나는 이 말을 정말 자주 들었다."
   },
   {
     mode: "기억",
     category: "오늘",
     text: "오늘 웃었던 이유는?",
     hint: "크게 웃지 않았어도 괜찮아요. 입꼬리가 살짝 올라간 순간을 떠올려보세요.",
-    starter: "오늘 내가 웃었던 이유는 아주 사소한 일이었다."
   },
   {
     mode: "기억",
     category: "음식",
     text: "최근에 먹은 것 중 다시 생각나는 음식은?",
     hint: "맛, 그릇, 같이 있던 사람, 먹던 장소 중 하나에서 시작해보세요.",
-    starter: "며칠이 지났는데도 그 음식이 다시 생각난다."
   },
   {
     mode: "기억",
     category: "방",
     text: "내 방에서 가장 자주 손이 가는 물건은?",
     hint: "매일 만지는 물건 하나를 고르고, 언제부터 익숙해졌는지 적어보세요.",
-    starter: "내 방에서 가장 자주 손이 가는 물건은..."
   },
   {
     mode: "감각",
     category: "소리",
     text: "오늘 가장 오래 들은 소리는?",
     hint: "키보드 소리, 차 소리, 사람 목소리처럼 하루 곁에 있던 소리를 떠올려보세요.",
-    starter: "오늘 하루를 돌아보면 가장 오래 들린 소리는..."
   },
   {
     mode: "기억",
     category: "가족",
     text: "가족 중 한 사람의 말투를 떠올리면?",
     hint: "자주 쓰는 말, 부르는 방식, 목소리의 높낮이를 그대로 적어보세요.",
-    starter: "그 사람의 말투는 이상하게 쉽게 잊히지 않는다."
   },
   {
     mode: "기억",
     category: "가게",
     text: "어릴 때 자주 가던 가게는?",
     hint: "문을 열 때의 느낌, 진열대, 계산대, 사장님 얼굴 중 하나를 적어보세요.",
-    starter: "어릴 때 자주 가던 가게에는 늘 비슷한 냄새가 났다."
   },
   {
     mode: "기억",
     category: "오늘",
     text: "오늘 가장 많이 만진 물건은?",
     hint: "휴대폰 말고도 컵, 문고리, 펜, 가방처럼 손에 남은 물건을 찾아보세요.",
-    starter: "오늘 내가 가장 많이 만진 물건은 아마도..."
   },
   {
     mode: "기억",
     category: "옷",
     text: "오래 입어서 몸에 익은 옷은?",
     hint: "그 옷을 입고 갔던 장소나, 자꾸 손이 가는 이유를 적어보세요.",
-    starter: "이 옷은 오래 입어서 그런지 내 하루와 닮아 있다."
   },
   {
     mode: "기억",
     category: "사진",
     text: "휴대폰 사진첩에서 최근에 다시 본 사진은?",
     hint: "사진 속 장면보다 그 사진을 왜 다시 봤는지부터 적어도 좋아요.",
-    starter: "사진첩을 넘기다 다시 멈춘 사진이 하나 있었다."
   },
   {
     mode: "기억",
     category: "길",
     text: "오늘 지나간 길에서 눈에 띈 것은?",
     hint: "간판, 나무, 사람, 바닥의 무늬처럼 아주 작은 것 하나만 골라보세요.",
-    starter: "오늘 지나간 길에서 이상하게 눈에 들어온 것이 있었다."
   },
   {
     mode: "기억",
     category: "계절",
     text: "여름이면 꼭 생각나는 장면은?",
     hint: "더위, 선풍기, 아이스크림, 젖은 머리처럼 여름의 한 장면을 적어보세요.",
-    starter: "여름이 오면 꼭 떠오르는 장면이 있다."
   },
   {
     mode: "기억",
     category: "계절",
     text: "겨울 아침 하면 떠오르는 것은?",
     hint: "이불 밖 공기, 입김, 따뜻한 음료, 어두운 창밖 중 하나를 골라보세요.",
-    starter: "겨울 아침을 생각하면 가장 먼저 떠오르는 것은..."
   },
   {
     mode: "기억",
     category: "하루",
     text: "오늘 집에 들어와서 가장 먼저 한 일은?",
     hint: "신발을 벗는 순간, 불을 켜는 손, 가방을 내려놓는 자리부터 적어보세요.",
-    starter: "오늘 집에 들어오자마자 나는 먼저..."
   },
   {
     mode: "기억",
     category: "물건",
     text: "버리려다 계속 남겨둔 물건은?",
     hint: "왜 버리지 못했는지 설명하기보다, 그 물건을 마지막으로 만진 순간을 떠올려보세요.",
-    starter: "버리려고 마음먹었는데도 아직 남겨둔 물건이 있다."
   },
   {
     mode: "기억",
     category: "친구",
     text: "친구와 함께 먹었던 음식 중 떠오르는 것은?",
     hint: "음식 이름보다 그때 앉아 있던 자리와 대화의 분위기를 적어보세요.",
-    starter: "그 친구를 생각하면 이상하게 그 음식이 같이 떠오른다."
   },
   {
     mode: "기억",
     category: "시간",
     text: "하루 중 가장 조용했던 순간은?",
     hint: "아무 일도 없던 몇 분을 골라 그때의 빛, 소리, 자세를 적어보세요.",
-    starter: "오늘 하루 중 가장 조용했던 순간은..."
   },
   {
     mode: "기억",
     category: "말",
     text: "최근에 들은 말 중 오래 남은 말은?",
     hint: "멋진 말이 아니어도 괜찮아요. 계속 머릿속에 남은 한마디를 적어보세요.",
-    starter: "요즘 이상하게 계속 생각나는 말이 있다."
   },
   {
     mode: "기억",
     category: "장소",
     text: "한동안 가지 않았지만 선명한 장소는?",
     hint: "그 장소의 입구, 바닥, 소리처럼 몸이 기억하는 부분부터 적어보세요.",
-    starter: "오래 가지 않았는데도 그곳은 아직 선명하게 남아 있다."
   },
   {
     mode: "기억",
     category: "오늘",
     text: "오늘 가장 오래 머문 자리는?",
     hint: "의자, 책상 앞, 차 안, 침대 위처럼 몸이 머문 곳을 떠올려보세요.",
-    starter: "오늘 내가 가장 오래 머문 자리는..."
   }
 ];
 
 const storageKey = "haru-writing-app";
 const todayKey = formatDate(new Date());
-const memoryRules = [
-  { tag: "가족", words: ["엄마", "아빠", "어머니", "아버지", "부모", "가족", "동생", "언니", "오빠", "형", "할머니", "할아버지"] },
-  { tag: "어린 시절", words: ["어릴", "어렸", "초등학교", "학교", "교실", "운동장", "문방구", "과자", "친구"] },
-  { tag: "음식", words: ["밥", "과자", "김", "라면", "커피", "빵", "냉장고", "음식", "맛", "먹"] },
-  { tag: "장소", words: ["집", "방", "길", "가게", "학교", "회사", "공원", "버스", "지하철", "카페"] },
-  { tag: "계절", words: ["봄", "여름", "가을", "겨울", "비", "눈", "더위", "추위", "바람"] },
-  { tag: "감각", words: ["냄새", "소리", "빛", "색", "온도", "촉감", "맛", "공기"] },
-  { tag: "마음", words: ["좋았", "슬펐", "편안", "불안", "기뻤", "웃", "그립", "미안", "고마"] }
-];
-const followupQuestions = [
-  "그 장면에서 가장 먼저 보였던 것은 무엇이었나요?",
-  "그때 어떤 냄새나 소리가 함께 있었나요?",
-  "그 순간의 내 표정은 어땠을까요?",
-  "지금 다시 떠올리면 어떤 마음이 남나요?",
-  "그 기억 속에 함께 있던 사람은 누구였나요?",
-  "그 장면을 한 문장만 더 자세히 적어볼까요?",
-  "그때의 나에게 지금 해주고 싶은 말이 있나요?"
-];
-const stopWords = new Set([
-  "오늘", "가장", "나는", "내가", "그리고", "그래서", "하지만", "그때", "지금", "정말", "조금", "너무", "있다", "있었다", "것은", "것이", "것을", "그냥"
-]);
 const memory = window.HaruMemory;
 const prompts = memory.promptGenerator.generatePrompts();
 const state = loadState();
 let currentPrompt = normalizePrompt(state.todayPrompt) || promptForToday();
+let selectedCategory = state.preferredCategory || "all";
 let lastSelectedSentence = "";
 let editingEntryId = null;
 let selectedDateFilter = null;
@@ -226,15 +180,15 @@ const els = {
   promptCategory: document.querySelector("#promptCategory"),
   currentPrompt: document.querySelector("#currentPrompt"),
   promptHint: document.querySelector("#promptHint"),
-  starterSentence: document.querySelector("#starterSentence"),
+  categorySelect: document.querySelector("#categorySelect"),
+  themeToggleBtn: document.querySelector("#themeToggleBtn"),
+  themeToggleLabel: document.querySelector("#themeToggleLabel"),
   newDraftBtn: document.querySelector("#newDraftBtn"),
   newPromptBtn: document.querySelector("#newPromptBtn"),
   freeWriteBtn: document.querySelector("#freeWriteBtn"),
   cancelEditBtn: document.querySelector("#cancelEditBtn"),
   savePromptBtn: document.querySelector("#savePromptBtn"),
   saveSentenceBtn: document.querySelector("#saveSentenceBtn"),
-  helperTools: document.querySelector(".helper-tools"),
-  helperResult: document.querySelector("#helperResult"),
   entrySubmitBtn: document.querySelector("#entrySubmitBtn"),
   exportMarkdownBtn: document.querySelector("#exportMarkdownBtn"),
   clearDateFilterBtn: document.querySelector("#clearDateFilterBtn"),
@@ -242,7 +196,6 @@ const els = {
   entryForm: document.querySelector("#entryForm"),
   entryTitle: document.querySelector("#entryTitle"),
   entryBody: document.querySelector("#entryBody"),
-  coachMessage: document.querySelector("#coachMessage"),
   wordCount: document.querySelector("#wordCount"),
   saveState: document.querySelector("#saveState"),
   recordSearch: document.querySelector("#recordSearch"),
@@ -271,14 +224,55 @@ function initialize() {
     weekday: "long"
   }).format(new Date());
 
-  persist({ todayPrompt: currentPrompt });
+  initializeCategorySelect();
+  applyTheme(state.theme || "quiet");
+  const currentPromptIsInCatalog = prompts.some((prompt) => prompt.id === currentPrompt.id);
+  if (!currentPromptIsInCatalog && currentPrompt.id !== "free-writing") {
+    currentPrompt = selectedCategory === "all" ? promptForToday() : randomPrompt(currentPrompt.id || currentPrompt.text);
+  } else if (selectedCategory !== "all" && currentPrompt.category !== selectedCategory) {
+    currentPrompt = randomPrompt(currentPrompt.id || currentPrompt.text);
+  }
+  persist({ todayPrompt: currentPrompt, preferredCategory: selectedCategory, theme: state.theme || "quiet" });
   bindEvents();
   renderAll();
+}
+
+function initializeCategorySelect() {
+  const categories = [...new Set(prompts.map((prompt) => prompt.category))];
+  els.categorySelect.innerHTML = [
+    `<option value="all">모든 주제</option>`,
+    ...categories.map((category) => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`)
+  ].join("");
+
+  if (!categories.includes(selectedCategory)) selectedCategory = "all";
+  els.categorySelect.value = selectedCategory;
+}
+
+function applyTheme(theme) {
+  const isFresh = theme === "fresh";
+  document.body.dataset.theme = isFresh ? "fresh" : "quiet";
+  els.themeToggleBtn.setAttribute("aria-pressed", String(isFresh));
+  els.themeToggleLabel.textContent = isFresh ? "서재 모드" : "상큼 모드";
+  document.querySelector('meta[name="theme-color"]').content = isFresh ? "#fff7e8" : "#f3f5ef";
 }
 
 function bindEvents() {
   document.querySelectorAll(".nav-tab").forEach((button) => {
     button.addEventListener("click", () => switchView(button.dataset.view));
+  });
+
+  els.categorySelect.addEventListener("change", () => {
+    selectedCategory = els.categorySelect.value;
+    currentPrompt = randomPrompt(currentPrompt.id || currentPrompt.text);
+    persist({ todayPrompt: currentPrompt, preferredCategory: selectedCategory });
+    renderPrompt();
+    els.saveState.textContent = selectedCategory === "all" ? "모든 주제에서 골랐어요" : `${selectedCategory} 주제를 골랐어요`;
+  });
+
+  els.themeToggleBtn.addEventListener("click", () => {
+    const nextTheme = (state.theme || "quiet") === "quiet" ? "fresh" : "quiet";
+    persist({ theme: nextTheme });
+    applyTheme(nextTheme);
   });
 
   els.newDraftBtn.addEventListener("click", () => {
@@ -324,7 +318,6 @@ function bindEvents() {
   });
   els.saveSentenceBtn.addEventListener("touchstart", rememberAnySelectedSentence, { passive: true });
   els.saveSentenceBtn.addEventListener("click", saveSelectedSentence);
-  els.helperTools.addEventListener("click", handleMemoryHelper);
   els.exportMarkdownBtn.addEventListener("click", exportMarkdown);
   els.cancelEditBtn.addEventListener("click", () => {
     exitEditMode();
@@ -600,59 +593,6 @@ function saveSentenceFromSelection(entry) {
   renderStats();
 }
 
-function handleMemoryHelper(event) {
-  const button = event.target.closest("[data-helper-action]");
-  if (!button) return;
-
-  const action = button.dataset.helperAction;
-  const body = els.entryBody.value.trim();
-  const title = els.entryTitle.value.trim();
-
-  if (action === "title") {
-    const suggestion = suggestTitle(body, currentPrompt);
-    if (!title) {
-      els.entryTitle.value = suggestion;
-    }
-    renderHelperResult("제목 씨앗", [`${suggestion}`, title ? "마음에 들면 제목 칸에 옮겨 적어보세요." : "제목 칸에 넣어두었어요. 언제든 바꿔도 좋아요."]);
-    els.saveState.textContent = "제목 씨앗을 골랐어요";
-    return;
-  }
-
-  if (action === "more") {
-    const starter = suggestStarter(body, currentPrompt);
-    if (!body) {
-      els.entryBody.value = starter;
-      renderWordCount();
-      els.entryBody.focus();
-      els.entryBody.setSelectionRange(els.entryBody.value.length, els.entryBody.value.length);
-    }
-    renderHelperResult("한 가지 더 떠올려보기", [starter, body ? "이 문장처럼 한 장면을 더 붙여보세요." : "본문에 넣어두었어요. 뒤에 한 문장만 이어 적어도 충분해요."]);
-    els.saveState.textContent = "기억 하나를 더 꺼냈어요";
-    return;
-  }
-
-  if (action === "continue") {
-    const question = suggestFollowupQuestion(body, currentPrompt);
-    renderHelperResult("기억 이어가기", [question, "답을 길게 쓰지 않아도 괜찮아요. 떠오르는 단어 하나만 붙여도 이어집니다."]);
-    els.saveState.textContent = "이어 쓸 질문을 꺼냈어요";
-    return;
-  }
-
-  if (action === "sentence") {
-    const sentence = pickBestSentence(body);
-    renderHelperResult("오늘의 문장", sentence ? [`“${sentence}”`] : ["아직 뽑을 문장이 없어요. 한 줄만 적고 다시 눌러보세요."]);
-    els.saveState.textContent = "오늘의 문장을 살펴봤어요";
-  }
-}
-
-function renderHelperResult(title, messages) {
-  els.helperResult.classList.remove("hidden");
-  els.helperResult.innerHTML = `
-    <strong>${escapeHtml(title)}</strong>
-    ${messages.map((message) => `<p>${escapeHtml(message)}</p>`).join("")}
-  `;
-}
-
 function exportMarkdown() {
   const entries = state.entries.map(normalizeEntry);
 
@@ -762,16 +702,14 @@ function renderAll() {
 }
 
 function renderPrompt() {
-  els.promptCategory.textContent = `${currentPrompt.mode} · ${currentPrompt.category}`;
+  els.promptCategory.textContent = [currentPrompt.category, currentPrompt.subcategory].filter(Boolean).join(" · ");
   els.currentPrompt.textContent = currentPrompt.text;
   els.promptHint.textContent = currentPrompt.hint;
-  els.starterSentence.textContent = currentPrompt.starter;
 }
 
 function renderWordCount() {
   const length = els.entryBody.value.length;
   els.wordCount.textContent = `${length.toLocaleString("ko-KR")}자`;
-  els.coachMessage.textContent = memory.writingCoach.coachMessage(length);
 }
 
 function renderRecords() {
@@ -983,36 +921,8 @@ function renderMemoryDex(entries) {
     .join("");
 }
 
-function suggestTitle(body, prompt) {
-  return memory.writingCoach.suggestTitle(body, prompt);
-}
-
-function suggestStarter(body, prompt) {
-  return memory.writingCoach.suggestStarter(body, prompt);
-}
-
-function suggestFollowupQuestion(body, prompt) {
-  return memory.writingCoach.suggestFollowupQuestion(body, prompt);
-}
-
-function suggestPolishNotes(body) {
-  return memory.writingCoach.suggestPolishNotes(body);
-}
-
 function analyzeMemory(body, title, prompt) {
   return memory.tagEngine.analyzeMemory(body, title, prompt);
-}
-
-function extractKeywords(text) {
-  return memory.tagEngine.extractKeywords(text);
-}
-
-function pickBestSentence(body) {
-  return memory.sentencePicker.pickBestSentence(body);
-}
-
-function splitSentences(text) {
-  return memory.sentencePicker.splitSentences(text);
 }
 
 function favoriteCategory(entries) {
@@ -1051,7 +961,7 @@ function promptForToday() {
 }
 
 function randomPrompt(exceptKey) {
-  return memory.promptGenerator.randomPrompt(prompts, exceptKey);
+  return memory.promptGenerator.randomPrompt(prompts, exceptKey, selectedCategory);
 }
 
 function freeWritingPrompt() {
@@ -1059,12 +969,12 @@ function freeWritingPrompt() {
     id: "free-writing",
     mode: "자유",
     category: "자유 글쓰기",
+    subcategory: "내 이야기",
     keyword: "자유 글쓰기",
     difficulty: 1,
     tags: [],
     text: "오늘은 자유롭게 기록해보세요.",
-    hint: "앱이 준 글감이 아니어도 괜찮아요. 지금 머릿속에 남아 있는 것부터 한 줄만 적어보세요.",
-    starter: "오늘은 그냥 이 이야기를 남겨두고 싶다."
+    hint: "앱이 준 글감이 아니어도 괜찮아요. 지금 머릿속에 남아 있는 것부터 한 줄만 적어보세요."
   };
 }
 
@@ -1087,13 +997,13 @@ function normalizePrompt(prompt) {
   if (legacy) return { ...legacy, id: prompt?.id || legacy.text, keyword: prompt?.keyword || legacy.category, tags: [legacy.category] };
   return {
     id: prompt?.id || "fallback-today",
-    mode: prompt?.mode || "기억",
-    category: prompt?.category || "일상",
+    mode: prompt?.mode || "글감",
+    category: prompt?.category || "오늘과 일상",
+    subcategory: prompt?.subcategory || "작은 행동",
     keyword: prompt?.keyword || prompt?.category || "오늘",
-    tags: prompt?.tags || [prompt?.category || "일상"],
+    tags: prompt?.tags || [prompt?.category || "오늘과 일상"],
     text: prompt?.text || "오늘 가장 오래 본 물건은?",
-    hint: prompt?.hint || "책상 위, 손에 든 것, 화면 속 물건처럼 오늘 오래 머문 대상을 떠올려보세요.",
-    starter: prompt?.starter || "생각해보니 오늘 가장 오래 바라본 것은 의외로..."
+    hint: prompt?.hint || "떠오르는 장면 하나만 구체적으로 적어보세요."
   };
 }
 
@@ -1111,7 +1021,14 @@ function normalizeAnalysis(analysis, body, title, prompt) {
 }
 
 function loadState() {
-  const fallback = { entries: [], savedPrompts: [], savedSentences: [], todayPrompt: null };
+  const fallback = {
+    entries: [],
+    savedPrompts: [],
+    savedSentences: [],
+    todayPrompt: null,
+    preferredCategory: "all",
+    theme: "quiet"
+  };
   try {
     const loaded = JSON.parse(localStorage.getItem(storageKey));
     const merged = { ...fallback, ...loaded };
