@@ -521,6 +521,11 @@ function handleRecordAction(event) {
     return;
   }
 
+  if (button.dataset.action === "save-to-obsidian") {
+    saveEntryToObsidian(entry);
+    return;
+  }
+
   if (button.dataset.action === "edit-entry") {
     startEditEntry(entry);
     return;
@@ -701,6 +706,23 @@ function buildEntryMarkdown(entry) {
   return lines.join("\n");
 }
 
+function obsidianTimestamp() {
+  return new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+}
+
+function saveEntryToObsidian(entry) {
+  const filename = `${entry.date}_${sanitizeFileName(entry.title)}_${obsidianTimestamp()}.md`;
+  const file = `01. 수집함/Writing2/${filename}`;
+  const content = buildEntryMarkdown(entry);
+  const uri = `obsidian://new?vault=${encodeURIComponent("Lumloom")}&file=${encodeURIComponent(file)}&content=${encodeURIComponent(content)}`;
+  if (uri.length > 12000) {
+    els.exportState.textContent = "기록이 길어 전체 기록 ZIP 저장을 이용해 주세요";
+    return;
+  }
+  els.exportState.textContent = "Obsidian으로 보내는 중이에요";
+  window.location.href = uri;
+}
+
 function buildSavedSentencesMarkdown() {
   const dates = state.savedSentences.map((sentence) => sentence.savedAt).filter(Boolean).sort();
   const createdAt = dates[0] || `${todayKey}T00:00:00+09:00`;
@@ -830,6 +852,7 @@ function renderRecords() {
           <div class="record-actions">
             <button class="small-button" type="button" data-action="toggle-read">전체 읽기</button>
             <button class="small-button" type="button" data-action="save-record-sentence">문장 씨앗</button>
+            <button class="small-button" type="button" data-action="save-to-obsidian">Obsidian에 저장</button>
             <button class="small-button" type="button" data-action="edit-entry">수정</button>
             <button class="small-button danger-button" type="button" data-action="delete-entry">삭제</button>
           </div>
