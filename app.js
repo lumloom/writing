@@ -639,7 +639,7 @@ function buildMarkdownFiles(entries) {
     usedNames.add(fileName.toLocaleLowerCase("ko-KR"));
 
     return {
-      name: fileName,
+      name: `20. Writing/하루문장/${fileName}`,
       content: buildEntryMarkdown(entry),
       modifiedAt: entry.updatedAt || entry.createdAt || `${entry.date}T00:00:00`
     };
@@ -647,7 +647,7 @@ function buildMarkdownFiles(entries) {
 
   if (state.savedSentences.length) {
     files.push({
-      name: "문장-보관함.md",
+      name: "20. Writing/보관함/문장 보관함.md",
       content: buildSavedSentencesMarkdown(),
       modifiedAt: new Date().toISOString()
     });
@@ -657,17 +657,28 @@ function buildMarkdownFiles(entries) {
 }
 
 function buildEntryMarkdown(entry) {
+  const createdAt = entry.createdAt || `${entry.date}T00:00:00+09:00`;
+  const updatedAt = entry.updatedAt || createdAt;
+  const tags = [...new Set(["lumloom", "writing", ...entry.analysis.tags])];
   const lines = [
     "---",
-    "source: 하루문장",
-    `date: ${entry.date}`,
+    `lumloom_id: writing-${entry.id}`,
+    "schema: lumloom-record/v1",
+    "source: writing",
+    "record_type: daily-writing",
     `title: ${JSON.stringify(entry.title)}`,
-    `created_at: ${JSON.stringify(entry.createdAt || `${entry.date}T00:00:00`)}`,
-    `updated_at: ${JSON.stringify(entry.updatedAt || entry.createdAt || `${entry.date}T00:00:00`)}`,
+    `date: ${entry.date}`,
+    `created_at: ${JSON.stringify(createdAt)}`,
+    `updated_at: ${JSON.stringify(updatedAt)}`,
+    "status: active",
+    `tags: ${JSON.stringify(tags)}`,
+    "people: []",
+    `projects: ${JSON.stringify(["[[Lumloom]]"])}`,
+    `related: ${JSON.stringify([`[[${entry.date}]]`])}`,
+    "published: false",
     `prompt: ${JSON.stringify(entry.prompt.text)}`,
     `category: ${JSON.stringify(entry.prompt.category)}`,
-    `type: ${JSON.stringify(entry.prompt.mode)}`,
-    `tags: ${JSON.stringify(entry.analysis.tags)}`,
+    `prompt_type: ${JSON.stringify(entry.prompt.mode)}`,
     `keywords: ${JSON.stringify(entry.analysis.keywords)}`,
     "---",
     "",
@@ -691,11 +702,25 @@ function buildEntryMarkdown(entry) {
 }
 
 function buildSavedSentencesMarkdown() {
+  const dates = state.savedSentences.map((sentence) => sentence.savedAt).filter(Boolean).sort();
+  const createdAt = dates[0] || `${todayKey}T00:00:00+09:00`;
+  const updatedAt = dates.at(-1) || createdAt;
   const lines = [
     "---",
-    "source: 하루문장",
-    `exported: ${todayKey}`,
+    "lumloom_id: writing-sentence-library",
+    "schema: lumloom-record/v1",
+    "source: writing",
+    "record_type: sentence-library",
     `title: ${JSON.stringify("문장 보관함")}`,
+    `date: ${todayKey}`,
+    `created_at: ${JSON.stringify(createdAt)}`,
+    `updated_at: ${JSON.stringify(updatedAt)}`,
+    "status: active",
+    `tags: ${JSON.stringify(["lumloom", "writing", "sentence-library"])}`,
+    "people: []",
+    `projects: ${JSON.stringify(["[[Lumloom]]"])}`,
+    "related: []",
+    "published: false",
     "---",
     "",
     "# 문장 보관함",
