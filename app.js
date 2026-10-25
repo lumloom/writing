@@ -603,85 +603,124 @@ function exportMarkdown() {
     return;
   }
 
-  const markdown = buildMarkdown(entries);
-  const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
+  try {
+    const files = buildMarkdownFiles(entries);
+    const blob = window.HaruZip.createArchive(files);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
 
-  link.href = url;
-  link.download = `haru-memory-${todayKey}.md`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-  els.exportState.textContent = "Markdown 파일을 만들었어요";
+    link.href = url;
+    link.download = `haru-writing-backup-${todayKey}.zip`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    els.exportState.textContent = `기록 ${entries.length}편을 ZIP 파일로 만들었어요`;
+  } catch (error) {
+    console.error("기록 내보내기에 실패했습니다.", error);
+    els.exportState.textContent = "ZIP 파일을 만들지 못했어요. 잠시 후 다시 시도해 주세요";
+  }
 }
 
-function buildMarkdown(entries) {
+function buildMarkdownFiles(entries) {
   const sorted = [...entries].sort((a, b) =>
     (a.createdAt || a.updatedAt || a.date).localeCompare(b.createdAt || b.updatedAt || b.date)
   );
-  const generatedAt = new Intl.DateTimeFormat("ko-KR", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit"
-  }).format(new Date());
+  const usedNames = new Set();
+  const files = sorted.map((entry) => {
+    const baseName = `${entry.date || todayKey}_${sanitizeFileName(entry.title)}`;
+    let duplicateIndex = 1;
+    let fileName = `${baseName}.md`;
+
+    while (usedNames.has(fileName.toLocaleLowerCase("ko-KR"))) {
+      duplicateIndex += 1;
+      fileName = `${baseName}_${duplicateIndex}.md`;
+    }
+    usedNames.add(fileName.toLocaleLowerCase("ko-KR"));
+
+    return {
+      name: fileName,
+      content: buildEntryMarkdown(entry),
+      modifiedAt: entry.updatedAt || entry.createdAt || `${entry.date}T00:00:00`
+    };
+  });
+
+  if (state.savedSentences.length) {
+    files.push({
+      name: "문장-보관함.md",
+      content: buildSavedSentencesMarkdown(),
+      modifiedAt: new Date().toISOString()
+    });
+  }
+
+  return files;
+}
+
+function buildEntryMarkdown(entry) {
+  const lines = [
+    "---",
+    "source: 하루문장",
+    `date: ${entry.date}`,
+    `title: ${JSON.stringify(entry.title)}`,
+    `created_at: ${JSON.stringify(entry.createdAt || `${entry.date}T00:00:00`)}`,
+    `updated_at: ${JSON.stringify(entry.updatedAt || entry.createdAt || `${entry.date}T00:00:00`)}`,
+    `prompt: ${JSON.stringify(entry.prompt.text)}`,
+    `category: ${JSON.stringify(entry.prompt.category)}`,
+    `type: ${JSON.stringify(entry.prompt.mode)}`,
+    `tags: ${JSON.stringify(entry.analysis.tags)}`,
+    `keywords: ${JSON.stringify(entry.analysis.keywords)}`,
+    "---",
+    "",
+    `# ${escapeMarkdownHeading(entry.title)}`,
+    "",
+    `- 날짜: ${entry.date}`,
+    `- 글감 씨앗: ${entry.prompt.text}`,
+    `- 글자 수: ${entry.charCount.toLocaleString("ko-KR")}자`
+  ];
+
+  if (entry.analysis.bestSentence) {
+    lines.push("");
+    lines.push(`> ${entry.analysis.bestSentence}`);
+  }
+
+  lines.push("");
+  lines.push(entry.body.trim());
+  lines.push("");
+
+  return lines.join("\n");
+}
+
+function buildSavedSentencesMarkdown() {
   const lines = [
     "---",
     "source: 하루문장",
     `exported: ${todayKey}`,
-    "tags:",
-    "  - 기록",
-    "  - 기억",
-    "  - 하루문장",
+    `title: ${JSON.stringify("문장 보관함")}`,
     "---",
     "",
-    "# 하루문장 기록",
-    "",
-    `내보낸 시간: ${generatedAt}`,
-    "",
-    `총 ${sorted.length}편`,
+    "# 문장 보관함",
     ""
   ];
 
-  sorted.forEach((entry) => {
-    lines.push(`## ${escapeMarkdownHeading(entry.title)}`);
+  state.savedSentences.forEach((sentence) => {
+    lines.push(`> ${sentence.text}`);
     lines.push("");
-    lines.push(`- 날짜: ${entry.date}`);
-    lines.push(`- 글감 씨앗: ${entry.prompt.text}`);
-    lines.push(`- 유형: ${entry.prompt.mode}`);
-    lines.push(`- 분류: ${entry.prompt.category}`);
-    lines.push(`- 글자 수: ${entry.charCount.toLocaleString("ko-KR")}자`);
-    if (entry.analysis.tags.length) {
-      lines.push(`- 기억 태그: ${entry.analysis.tags.join(", ")}`);
-    }
-    if (entry.analysis.keywords.length) {
-      lines.push(`- 기억 키워드: ${entry.analysis.keywords.join(", ")}`);
-    }
-    if (entry.analysis.bestSentence) {
-      lines.push(`- 오늘의 문장: ${entry.analysis.bestSentence}`);
-    }
-    lines.push("");
-    lines.push(entry.body.trim());
-    lines.push("");
-    lines.push("---");
+    lines.push(`- 출처: ${sentence.sourceTitle || "제목 없는 기록"}`);
+    lines.push(`- 글감: ${sentence.prompt?.text || "알 수 없음"}`);
     lines.push("");
   });
 
-  if (state.savedSentences.length) {
-    lines.push("# 문장 씨앗");
-    lines.push("");
-    state.savedSentences.forEach((sentence) => {
-      lines.push(`> ${sentence.text}`);
-      lines.push("");
-      lines.push(`- 출처 글감: ${sentence.prompt?.text || "알 수 없음"}`);
-      lines.push("");
-    });
-  }
-
   return lines.join("\n");
+}
+
+function sanitizeFileName(value) {
+  const cleaned = (value || "제목 없는 기록")
+    .replace(/[\\/:*?"<>|\u0000-\u001f]/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/[. ]+$/g, "")
+    .trim()
+    .slice(0, 60);
+  return cleaned || "제목 없는 기록";
 }
 
 function clearEditor() {

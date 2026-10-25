@@ -118,7 +118,7 @@
             <div class="header-actions">
               <input class="search-input" id="recordSearch" type="search" placeholder="기록 검색" />
               <button class="quiet-button hidden" id="clearDateFilterBtn" type="button">전체 날짜</button>
-              <button class="quiet-button" id="exportMarkdownBtn" type="button">Markdown 저장</button>
+              <button class="quiet-button" id="exportMarkdownBtn" type="button">전체 기록 ZIP 저장</button>
               <span class="export-state" id="exportState" aria-live="polite"></span>
             </div>
           </header>
@@ -188,6 +188,7 @@
     <script src="./src/engines/sentencePicker.js"></script>
     <script src="./src/engines/tagEngine.js"></script>
     <script src="./src/engines/memoryDex.js"></script>
-    <script src="./app.js?v=3"></script>
+    <script src="./src/utils/zipArchive.js?v=1"></script>
+    <script src="./app.js?v=4"></script>
   </body>
 </html>
