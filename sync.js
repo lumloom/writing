@@ -61,6 +61,12 @@
     render();
   }
 
+  function syncErrorText(error) {
+    const detail = error?.message || error?.details || error?.error_description;
+    const code = error?.code ? ` (${error.code})` : "";
+    return detail ? `${detail}${code}` : "잠시 후 다시 시도해주세요.";
+  }
+
   function render() {
     const local = localState();
     const pending = hasContent(local) && (!meta.record.remoteVersion || meta.record.dirty);
@@ -189,7 +195,7 @@
         : `동기화 완료 · ${new Intl.DateTimeFormat("ko-KR", { hour: "numeric", minute: "2-digit" }).format(new Date())}`);
     } catch (error) {
       console.error("Writing sync failed", error);
-      setMessage(`동기화하지 못했습니다. ${error?.message || "잠시 후 다시 시도해주세요."}`, true);
+      setMessage(`동기화하지 못했습니다. ${syncErrorText(error)}`, true);
     } finally {
       busy = false;
       render();
