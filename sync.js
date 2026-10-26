@@ -18,7 +18,10 @@
     close: document.querySelector("#accountClose"),
     loginForm: document.querySelector("#accountLoginForm"),
     emailInput: document.querySelector("#accountEmail"),
+    passwordInput: document.querySelector("#accountPassword"),
     loginButton: document.querySelector("#accountLoginButton"),
+    passwordForm: document.querySelector("#accountPasswordForm"),
+    newPasswordInput: document.querySelector("#accountNewPassword"),
     session: document.querySelector("#accountSession"),
     emailText: document.querySelector("#accountEmailText"),
     logout: document.querySelector("#accountLogout"),
@@ -75,7 +78,7 @@
     ui.loginForm.classList.toggle("hidden", Boolean(user));
     ui.session.classList.toggle("hidden", !user);
     ui.loginButton.disabled = busy;
-    ui.loginButton.textContent = busy && !user ? "보내는 중…" : "로그인 링크 받기";
+    ui.loginButton.textContent = busy && !user ? "로그인 중…" : "로그인";
     ui.emailText.textContent = user?.email || "";
     ui.localCount.textContent = String(entryCount(local));
     ui.cloudCount.textContent = String(cloudCount);
@@ -202,21 +205,32 @@
     }
   }
 
-  async function requestLogin(email) {
+  async function requestLogin(email, password) {
     busy = true;
     render();
-    const redirectTo = `${location.origin}${location.pathname}`;
-    const { error } = await client.auth.signInWithOtp({ email, options: { emailRedirectTo: redirectTo } });
+    const { error } = await client.auth.signInWithPassword({ email, password });
     busy = false;
     if (error) {
-      const rateLimited = error.message.toLowerCase().includes("rate limit");
-      setMessage(rateLimited
-        ? "로그인 메일 발송 한도를 초과했습니다. 잠시 후 다시 시도해주세요."
-        : `로그인 링크를 보내지 못했습니다. ${error.message}`, true);
+      setMessage(error.message.toLowerCase().includes("invalid login")
+        ? "이메일 또는 비밀번호를 확인해주세요."
+        : `로그인하지 못했습니다. ${syncErrorText(error)}`, true);
       return;
     }
-    ui.emailInput.value = "";
-    setMessage("메일함에서 가장 최근 Lumloom 로그인 링크를 눌러주세요.");
+    ui.passwordInput.value = "";
+    setMessage("로그인했습니다. 기록을 확인하고 있습니다…");
+  }
+
+  async function updatePassword(password) {
+    busy = true;
+    render();
+    const { error } = await client.auth.updateUser({ password });
+    busy = false;
+    if (error) {
+      setMessage(`비밀번호를 저장하지 못했습니다. ${syncErrorText(error)}`, true);
+      return;
+    }
+    ui.newPasswordInput.value = "";
+    setMessage("Lumloom 공용 비밀번호를 저장했습니다.");
   }
 
   async function setUser(next) {
@@ -248,7 +262,8 @@
     ui.close.addEventListener("click", closeModal);
     ui.backdrop.addEventListener("mousedown", (event) => { if (event.target === ui.backdrop) closeModal(); });
     document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !ui.backdrop.classList.contains("hidden")) closeModal(); });
-    ui.loginForm.addEventListener("submit", (event) => { event.preventDefault(); void requestLogin(ui.emailInput.value.trim()); });
+    ui.loginForm.addEventListener("submit", (event) => { event.preventDefault(); void requestLogin(ui.emailInput.value.trim(), ui.passwordInput.value); });
+    ui.passwordForm.addEventListener("submit", (event) => { event.preventDefault(); void updatePassword(ui.newPasswordInput.value); });
     ui.logout.addEventListener("click", () => { void client.auth.signOut({ scope: "local" }); });
     ui.syncNow.addEventListener("click", () => { void runSync(false); });
     ui.uploadExisting.addEventListener("click", () => { void runSync(true); });

@@ -1347,6 +1347,13 @@ body[data-theme="fresh"] .dex-bar i {
 .account-summary strong { font-size: 18px; }
 .account-summary span { color: var(--muted); font-size: 10px; }
 .account-actions > button { flex: 1; }
+.account-password-settings { padding-top: 12px; border-top: 1px solid var(--line); }
+.account-password-settings summary { cursor: pointer; color: var(--muted); font-size: 11px; font-weight: 600; }
+.account-password-settings form { margin-top: 10px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: end; }
+.account-password-settings label { display: grid; gap: 6px; color: var(--muted); font-size: 11px; }
+.account-password-settings input { min-height: 44px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--paper); }
+.account-password-settings .quiet-button { min-height: 44px; }
+.account-password-settings small { display: block; margin-top: 7px; color: var(--muted); }
 
 .account-conflict {
   display: grid;

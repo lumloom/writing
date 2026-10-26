@@ -12,7 +12,7 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400;500;600&amp;display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=3" />
+    <link rel="stylesheet" href="./styles.css?v=20261026-password-login" />
   </head>
   <body>
     <div class="app-shell">
@@ -195,8 +195,12 @@
             <span>이메일</span>
             <input id="accountEmail" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" required />
           </label>
-          <button class="primary-button" id="accountLoginButton" type="submit">로그인 링크 받기</button>
-          <small>메일함에서 가장 최근 Lumloom 로그인 링크를 눌러주세요.</small>
+          <label>
+            <span>비밀번호</span>
+            <input id="accountPassword" type="password" autocomplete="current-password" minlength="8" placeholder="8자 이상" required />
+          </label>
+          <button class="primary-button" id="accountLoginButton" type="submit">로그인</button>
+          <small>같은 Lumloom 이메일과 비밀번호를 네 기기에서 사용합니다.</small>
         </form>
 
         <div class="account-session hidden" id="accountSession">
@@ -213,6 +217,14 @@
             <button class="primary-button" id="accountSyncNow" type="button">지금 동기화</button>
             <button class="quiet-button" id="accountUploadExisting" type="button">기존 기록 올리기</button>
           </div>
+          <details class="account-password-settings">
+            <summary>비밀번호 설정·변경</summary>
+            <form id="accountPasswordForm">
+              <label><span>새 비밀번호</span><input id="accountNewPassword" type="password" autocomplete="new-password" minlength="8" placeholder="8자 이상" required /></label>
+              <button class="quiet-button" type="submit">저장</button>
+            </form>
+            <small>한 앱에서 설정한 비밀번호를 모든 Lumloom 앱에서 사용합니다.</small>
+          </details>
           <div class="account-conflict hidden" id="accountConflict">
             <strong>기록 보관함 충돌</strong>
             <span>이 기기와 클라우드에서 모두 변경되었습니다.</span>
@@ -243,6 +255,6 @@
     <script src="./src/utils/zipArchive.js?v=1"></script>
     <script src="./src/vendor/supabase.js?v=1"></script>
     <script src="./app.js?v=7"></script>
-    <script src="./sync.js?v=1"></script>
+    <script src="./sync.js?v=20261026-password-login"></script>
   </body>
 </html>
