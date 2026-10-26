@@ -1233,3 +1233,155 @@ body[data-theme="fresh"] .dex-bar i {
     transition: transform 180ms ease;
   }
 }
+
+/* Lumloom 계정과 기기 간 동기화 */
+.account-trigger {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 42px;
+  margin: 18px 0 0;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: rgba(252, 252, 248, 0.72);
+  color: var(--ink-soft);
+  font-size: 12px;
+  text-align: left;
+}
+
+.account-status-dot {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
+.account-status-dot.online { background: var(--primary-dark); }
+.account-open { overflow: hidden; }
+
+.account-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow-y: auto;
+  background: rgba(48, 59, 50, 0.38);
+  backdrop-filter: blur(4px);
+}
+
+.account-modal {
+  width: min(560px, 100%);
+  max-height: calc(100dvh - 40px);
+  padding: 30px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 28px 80px rgba(48, 59, 50, 0.2);
+}
+
+.account-modal-head,
+.account-email-row,
+.account-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.account-modal-head { align-items: flex-start; justify-content: space-between; }
+.account-modal-head h2 { margin: 7px 0 0; font: 600 25px var(--serif); }
+
+.account-close {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.account-lead { margin: 18px 0; color: var(--muted); font-size: 13px; line-height: 1.8; }
+.account-login, .account-session { display: grid; gap: 14px; }
+.account-login label { display: grid; gap: 6px; color: var(--muted); font-size: 11px; }
+
+.account-login input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 11px;
+  background: var(--paper);
+}
+
+.account-login small { color: var(--muted); }
+.account-email-row { flex-wrap: wrap; justify-content: space-between; }
+.account-email-row > div { display: grid; gap: 2px; }
+.account-email-row span { color: var(--muted); font-size: 11px; }
+.account-email-row strong { word-break: break-all; }
+
+.account-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.account-summary > div {
+  display: grid;
+  gap: 2px;
+  padding: 13px 8px;
+  text-align: center;
+  border-radius: 11px;
+  background: var(--primary-soft);
+}
+
+.account-summary strong { font-size: 18px; }
+.account-summary span { color: var(--muted); font-size: 10px; }
+.account-actions > button { flex: 1; }
+
+.account-conflict {
+  display: grid;
+  gap: 7px;
+  padding: 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: 11px;
+  font-size: 12px;
+}
+
+.account-conflict > div { display: flex; gap: 8px; }
+.account-message { min-height: 18px; margin: 14px 0 0; color: var(--primary-dark); font-size: 12px; }
+.account-message.error { color: var(--danger); }
+
+@media (max-width: 900px) {
+  .account-trigger {
+    width: 38px;
+    min-height: 36px;
+    margin: 0 4px 0 auto;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .account-trigger > span:last-child { display: none; }
+  .theme-toggle { margin-left: 0; }
+}
+
+@media (max-width: 640px) {
+  .account-backdrop { align-items: end; padding: 0; }
+  .account-modal {
+    width: 100%;
+    max-height: 92dvh;
+    padding: 25px 20px calc(24px + env(safe-area-inset-bottom));
+    border-radius: 20px 20px 0 0;
+  }
+  .account-modal-head h2 { font-size: 23px; }
+  .account-actions { align-items: stretch; flex-direction: column; }
+}

@@ -1139,7 +1139,44 @@ function persist(partial) {
 
 function saveState() {
   localStorage.setItem(storageKey, JSON.stringify(state));
+  if (!window.HaruSyncApplyingRemote) {
+    window.dispatchEvent(new CustomEvent("lumloom:writing-state-changed"));
+  }
 }
+
+window.HaruWritingSync = {
+  getState() {
+    return JSON.parse(JSON.stringify(state));
+  },
+  applyState(nextState) {
+    const fallback = {
+      entries: [],
+      savedPrompts: [],
+      savedSentences: [],
+      todayPrompt: null,
+      preferredCategory: "all",
+      theme: "quiet"
+    };
+    const next = { ...fallback, ...(nextState || {}) };
+    next.entries = (next.entries || []).map(normalizeEntry);
+    next.savedPrompts = (next.savedPrompts || []).map(normalizePrompt);
+    next.savedSentences = (next.savedSentences || []).map((sentence) => ({
+      ...sentence,
+      prompt: normalizePrompt(sentence.prompt),
+      savedAt: sentence.savedAt || new Date().toISOString()
+    }));
+    Object.keys(state).forEach((key) => delete state[key]);
+    Object.assign(state, next);
+    currentPrompt = normalizePrompt(state.todayPrompt) || promptForToday();
+    selectedCategory = state.preferredCategory || "all";
+    window.HaruSyncApplyingRemote = true;
+    localStorage.setItem(storageKey, JSON.stringify(state));
+    window.HaruSyncApplyingRemote = false;
+    initializeCategorySelect();
+    applyTheme(state.theme || "quiet");
+    renderAll();
+  }
+};
 
 function formatDate(date) {
   const year = date.getFullYear();

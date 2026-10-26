@@ -12,7 +12,7 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400;500;600&amp;display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=2" />
+    <link rel="stylesheet" href="./styles.css?v=3" />
   </head>
   <body>
     <div class="app-shell">
@@ -31,6 +31,11 @@
           <button class="nav-tab" data-view="vault" type="button">문장 보관함</button>
           <button class="nav-tab" data-view="stats" type="button">나의 루틴</button>
         </nav>
+
+        <button class="account-trigger" id="accountTrigger" type="button" aria-label="Lumloom 계정과 동기화" aria-haspopup="dialog" aria-controls="accountModal">
+          <span class="account-status-dot" aria-hidden="true"></span>
+          <span id="accountTriggerLabel">Lumloom 계정</span>
+        </button>
 
         <button class="theme-toggle" id="themeToggleBtn" type="button" aria-pressed="false">
           <span class="theme-swatch" aria-hidden="true"></span>
@@ -174,6 +179,53 @@
       </main>
     </div>
 
+    <div class="account-backdrop hidden" id="accountBackdrop">
+      <section class="account-modal" id="accountModal" role="dialog" aria-modal="true" aria-labelledby="accountTitle">
+        <header class="account-modal-head">
+          <div>
+            <span class="eyebrow">LUMLOOM ACCOUNT</span>
+            <h2 id="accountTitle">계정과 동기화</h2>
+          </div>
+          <button class="account-close" id="accountClose" type="button" aria-label="닫기">×</button>
+        </header>
+        <p class="account-lead">같은 계정으로 로그인하면 데스크탑, 아이패드, 아이폰에서 하루문장을 이어서 볼 수 있습니다.</p>
+
+        <form class="account-login" id="accountLoginForm">
+          <label>
+            <span>이메일</span>
+            <input id="accountEmail" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" required />
+          </label>
+          <button class="primary-button" id="accountLoginButton" type="submit">로그인 링크 받기</button>
+          <small>메일함에서 가장 최근 Lumloom 로그인 링크를 눌러주세요.</small>
+        </form>
+
+        <div class="account-session hidden" id="accountSession">
+          <div class="account-email-row">
+            <div><span>로그인한 계정</span><strong id="accountEmailText"></strong></div>
+            <button class="text-button" id="accountLogout" type="button">로그아웃</button>
+          </div>
+          <div class="account-summary">
+            <div><strong id="accountLocalCount">0</strong><span>이 기기 기록</span></div>
+            <div><strong id="accountCloudCount">0</strong><span>클라우드 기록</span></div>
+            <div><strong id="accountConflictCount">0</strong><span>확인할 충돌</span></div>
+          </div>
+          <div class="account-actions">
+            <button class="primary-button" id="accountSyncNow" type="button">지금 동기화</button>
+            <button class="quiet-button" id="accountUploadExisting" type="button">기존 기록 올리기</button>
+          </div>
+          <div class="account-conflict hidden" id="accountConflict">
+            <strong>기록 보관함 충돌</strong>
+            <span>이 기기와 클라우드에서 모두 변경되었습니다.</span>
+            <div>
+              <button class="quiet-button" id="accountUseLocal" type="button">이 기기 사용</button>
+              <button class="quiet-button" id="accountUseCloud" type="button">클라우드 사용</button>
+            </div>
+          </div>
+        </div>
+        <p class="account-message" id="accountMessage" role="status"></p>
+      </section>
+    </div>
+
     <nav class="bottom-tabs" aria-label="주요 화면">
       <button class="nav-tab active" data-view="write" type="button"><span>오늘</span></button>
       <button class="nav-tab" data-view="records" type="button"><span>기록</span></button>
@@ -189,6 +241,8 @@
     <script src="./src/engines/tagEngine.js"></script>
     <script src="./src/engines/memoryDex.js"></script>
     <script src="./src/utils/zipArchive.js?v=1"></script>
-    <script src="./app.js?v=6"></script>
+    <script src="./src/vendor/supabase.js?v=1"></script>
+    <script src="./app.js?v=7"></script>
+    <script src="./sync.js?v=1"></script>
   </body>
 </html>
