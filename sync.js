@@ -73,7 +73,7 @@
   function render() {
     const local = localState();
     const pending = hasContent(local) && (!meta.record.remoteVersion || meta.record.dirty);
-    ui.triggerLabel.textContent = user?.email || "Lumloom 계정";
+    ui.triggerLabel.textContent = user?.email || "로그인하지 않음";
     ui.statusDot.classList.toggle("online", Boolean(user));
     ui.loginForm.classList.toggle("hidden", Boolean(user));
     ui.session.classList.toggle("hidden", !user);

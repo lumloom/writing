@@ -1240,15 +1240,36 @@ body[data-theme="fresh"] .dex-bar i {
   align-items: center;
   gap: 9px;
   width: 100%;
-  min-height: 42px;
+  min-height: 54px;
   margin: 18px 0 0;
-  padding: 0 12px;
+  padding: 8px 12px;
   border: 1px solid var(--line);
   border-radius: 11px;
   background: rgba(252, 252, 248, 0.72);
   color: var(--ink-soft);
   font-size: 12px;
   text-align: left;
+}
+
+.account-trigger-copy {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.account-trigger-copy strong {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.account-trigger-copy small {
+  overflow: hidden;
+  color: var(--ink-soft);
+  font-size: 10px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .account-status-dot {
@@ -1377,7 +1398,7 @@ body[data-theme="fresh"] .dex-bar i {
     justify-content: center;
   }
 
-  .account-trigger > span:last-child { display: none; }
+  .account-trigger-copy { display: none; }
   .theme-toggle { margin-left: 0; }
 }
 

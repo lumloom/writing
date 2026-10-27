@@ -12,7 +12,7 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400;500;600&amp;display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20261026-password-login" />
+    <link rel="stylesheet" href="./styles.css?v=20261027-account-label" />
   </head>
   <body>
     <div class="app-shell">
@@ -34,7 +34,10 @@
 
         <button class="account-trigger" id="accountTrigger" type="button" aria-label="Lumloom 계정과 동기화" aria-haspopup="dialog" aria-controls="accountModal">
           <span class="account-status-dot" aria-hidden="true"></span>
-          <span id="accountTriggerLabel">Lumloom 계정</span>
+          <span class="account-trigger-copy">
+            <strong>Lumloom 계정</strong>
+            <small id="accountTriggerLabel">로그인하지 않음</small>
+          </span>
         </button>
 
         <button class="theme-toggle" id="themeToggleBtn" type="button" aria-pressed="false">
@@ -255,6 +258,6 @@
     <script src="./src/utils/zipArchive.js?v=1"></script>
     <script src="./src/vendor/supabase.js?v=1"></script>
     <script src="./app.js?v=7"></script>
-    <script src="./sync.js?v=20261027-smtp-auth"></script>
+    <script src="./sync.js?v=20261027-account-label"></script>
   </body>
 </html>
