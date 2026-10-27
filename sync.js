@@ -211,9 +211,12 @@
     const { error } = await client.auth.signInWithPassword({ email, password });
     busy = false;
     if (error) {
-      setMessage(error.message.toLowerCase().includes("invalid login")
-        ? "이메일 또는 비밀번호를 확인해주세요."
-        : `로그인하지 못했습니다. ${syncErrorText(error)}`, true);
+      const text = error.message.toLowerCase();
+      setMessage(text.includes("email not confirmed")
+        ? "이메일 인증을 먼저 완료해주세요."
+        : text.includes("invalid login")
+          ? "이메일 또는 비밀번호를 확인해주세요."
+          : `로그인하지 못했습니다. ${syncErrorText(error)}`, true);
       return;
     }
     ui.passwordInput.value = "";
