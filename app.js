@@ -271,7 +271,7 @@ function bindEvents() {
 
   els.themeToggleBtn.addEventListener("click", () => {
     const nextTheme = (state.theme || "quiet") === "quiet" ? "fresh" : "quiet";
-    persist({ theme: nextTheme });
+    persist({ theme: nextTheme }, { notifySync: false });
     applyTheme(nextTheme);
   });
 
@@ -1132,23 +1132,25 @@ function loadState() {
   }
 }
 
-function persist(partial) {
+function persist(partial, { notifySync = true } = {}) {
   Object.assign(state, partial);
-  saveState();
+  saveState(notifySync);
 }
 
-function saveState() {
+function saveState(notifySync = true) {
   localStorage.setItem(storageKey, JSON.stringify(state));
-  if (!window.HaruSyncApplyingRemote) {
+  if (notifySync && !window.HaruSyncApplyingRemote) {
     window.dispatchEvent(new CustomEvent("lumloom:writing-state-changed"));
   }
 }
 
 window.HaruWritingSync = {
   getState() {
-    return JSON.parse(JSON.stringify(state));
+    const { theme: _localTheme, ...recordState } = state;
+    return JSON.parse(JSON.stringify(recordState));
   },
   applyState(nextState) {
+    const localTheme = state.theme || "quiet";
     const fallback = {
       entries: [],
       savedPrompts: [],
@@ -1157,7 +1159,7 @@ window.HaruWritingSync = {
       preferredCategory: "all",
       theme: "quiet"
     };
-    const next = { ...fallback, ...(nextState || {}) };
+    const next = { ...fallback, ...(nextState || {}), theme: localTheme };
     next.entries = (next.entries || []).map(normalizeEntry);
     next.savedPrompts = (next.savedPrompts || []).map(normalizePrompt);
     next.savedSentences = (next.savedSentences || []).map((sentence) => ({

@@ -53,8 +53,13 @@
 
   let meta = loadMeta();
   const saveMeta = () => localStorage.setItem(META_KEY, JSON.stringify(meta));
-  const localState = () => window.HaruWritingSync.getState();
-  const samePayload = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+  const syncPayload = (payload) => {
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) return payload;
+    const { theme: _localTheme, ...recordState } = payload;
+    return recordState;
+  };
+  const localState = () => syncPayload(window.HaruWritingSync.getState());
+  const samePayload = (a, b) => JSON.stringify(syncPayload(a) ?? null) === JSON.stringify(syncPayload(b) ?? null);
   const hasContent = (payload) => Boolean(payload?.entries?.length || payload?.savedPrompts?.length || payload?.savedSentences?.length);
   const entryCount = (payload) => payload?.entries?.length || 0;
 
@@ -118,7 +123,7 @@
   }
 
   function applyRemote(remote) {
-    if (remote.status === "active") window.HaruWritingSync.applyState(remote.payload);
+    if (remote.status === "active") window.HaruWritingSync.applyState(syncPayload(remote.payload));
     trackRemote(remote);
   }
 
