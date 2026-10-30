@@ -158,6 +158,9 @@ const legacyPrompts = [
 ];
 
 const storageKey = "haru-writing-app";
+const OBSIDIAN_HANDOFF_KEY = "lumloom-writing-obsidian-handoff";
+const OBSIDIAN_SUCCESS_PARAM = "lumloom_obsidian_saved";
+const OBSIDIAN_UNCONFIRMED_MESSAGE = "저장 완료를 확인하지 못했어요. Lumloom Vault가 없거나 이름이 다를 수 있습니다. 전체 기록 ZIP 저장을 이용해 주세요.";
 const todayKey = formatDate(new Date());
 const memory = window.HaruMemory;
 const prompts = memory.promptGenerator.generatePrompts();
@@ -235,6 +238,7 @@ function initialize() {
   persist({ todayPrompt: currentPrompt, preferredCategory: selectedCategory, theme: state.theme || "quiet" });
   bindEvents();
   renderAll();
+  if (consumeObsidianSuccess()) showObsidianNotice("Obsidian의 Lumloom 수집함에 저장했습니다");
 }
 
 function initializeCategorySelect() {
@@ -710,16 +714,84 @@ function obsidianTimestamp() {
   return new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
 }
 
+function showObsidianNotice(message,duration=6500) {
+  let notice = document.querySelector("#obsidianNotice");
+  if (!notice) {
+    notice = document.createElement("div");
+    notice.id = "obsidianNotice";
+    notice.className = "obsidian-notice";
+    notice.setAttribute("role","status");
+    notice.setAttribute("aria-live","polite");
+    document.body.append(notice);
+  }
+  notice.textContent = message;
+  notice.classList.add("show");
+  clearTimeout(showObsidianNotice.timer);
+  showObsidianNotice.timer = setTimeout(()=>notice.classList.remove("show"),duration);
+}
+
+function beginObsidianHandoff() {
+  const token = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  localStorage.setItem(OBSIDIAN_HANDOFF_KEY,token);
+  const callbackUrl = new URL(window.location.href);
+  callbackUrl.searchParams.set(OBSIDIAN_SUCCESS_PARAM,token);
+  return { token, successUrl:callbackUrl.toString() };
+}
+
+function cancelObsidianHandoff(token) {
+  if (localStorage.getItem(OBSIDIAN_HANDOFF_KEY) === token) localStorage.removeItem(OBSIDIAN_HANDOFF_KEY);
+}
+
+function consumeObsidianSuccess() {
+  const currentUrl = new URL(window.location.href);
+  const token = currentUrl.searchParams.get(OBSIDIAN_SUCCESS_PARAM);
+  if (!token) return false;
+  const confirmed = localStorage.getItem(OBSIDIAN_HANDOFF_KEY) === token;
+  if (confirmed) localStorage.removeItem(OBSIDIAN_HANDOFF_KEY);
+  currentUrl.searchParams.delete(OBSIDIAN_SUCCESS_PARAM);
+  history.replaceState(history.state,"",`${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`);
+  return confirmed;
+}
+
+function watchObsidianHandoff(token,onUnconfirmed) {
+  let departed = false;
+  let settled = false;
+  const pending = () => localStorage.getItem(OBSIDIAN_HANDOFF_KEY) === token;
+  const cleanup = () => {
+    window.removeEventListener("blur",onDepart);
+    window.removeEventListener("focus",onReturn);
+    document.removeEventListener("visibilitychange",onVisibility);
+  };
+  const finish = () => {
+    if (settled) return;
+    settled = true;
+    cleanup();
+    if (!pending()) return;
+    localStorage.removeItem(OBSIDIAN_HANDOFF_KEY);
+    onUnconfirmed();
+  };
+  const onDepart = () => { departed = true; };
+  const onReturn = () => { if (departed) setTimeout(finish,500); };
+  const onVisibility = () => document.hidden ? onDepart() : onReturn();
+  window.addEventListener("blur",onDepart);
+  window.addEventListener("focus",onReturn);
+  document.addEventListener("visibilitychange",onVisibility);
+  setTimeout(() => { if (!departed && !document.hidden) finish(); },8000);
+}
+
 function saveEntryToObsidian(entry) {
   const filename = `${entry.date}_${sanitizeFileName(entry.title)}_${obsidianTimestamp()}.md`;
   const file = `01. 수집함/Writing2/${filename}`;
   const content = buildEntryMarkdown(entry);
-  const uri = `obsidian://new?vault=${encodeURIComponent("Lumloom")}&file=${encodeURIComponent(file)}&content=${encodeURIComponent(content)}`;
+  const handoff = beginObsidianHandoff();
+  const uri = `obsidian://new?vault=${encodeURIComponent("Lumloom")}&file=${encodeURIComponent(file)}&content=${encodeURIComponent(content)}&x-success=${encodeURIComponent(handoff.successUrl)}`;
   if (uri.length > 12000) {
+    cancelObsidianHandoff(handoff.token);
     els.exportState.textContent = "기록이 길어 전체 기록 ZIP 저장을 이용해 주세요";
     return;
   }
   els.exportState.textContent = "Obsidian으로 보내는 중이에요";
+  watchObsidianHandoff(handoff.token,()=>showObsidianNotice(OBSIDIAN_UNCONFIRMED_MESSAGE));
   window.location.href = uri;
 }
 

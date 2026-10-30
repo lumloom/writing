@@ -44,3 +44,4 @@ python -m http.server 4173
 - 서재 모드와 상큼 모드 선택은 기기마다 저장하며 클라우드에 동기화하지 않습니다.
 - Supabase 프로젝트에는 `supabase/lumloom-sync.sql`을 한 번 실행하고, Auth 리디렉션 URL에 배포 주소를 등록해야 합니다.
 - Markdown ZIP과 Obsidian 저장 기능은 계정 동기화와 별도로 계속 사용할 수 있습니다.
+- Obsidian 저장 성공 콜백이 돌아오면 완료를 알리고, 완료를 확인하지 못하면 `Lumloom` Vault 부재 또는 이름 불일치 가능성과 전체 기록 ZIP 대안을 안내합니다.
