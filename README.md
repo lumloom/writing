@@ -2,11 +2,14 @@
 
 Lumloom의 브랜드 감성에 맞춰 새롭게 구성한 글쓰기 앱입니다. 조용한 서재에서 종이를 펼친 듯한 경험을 목표로 색감, 타이포그래피, 여백, 모바일 글쓰기 흐름을 다시 설계했습니다.
 
+**서비스:** https://lumloom.github.io/writing/
+
 ## 유지한 기능
 
 - 기존 글감 데이터와 질문 생성 엔진
 - 글 작성, 저장, 수정, 삭제
 - 날짜별 기록과 검색, 글별 Markdown ZIP 내보내기
+- 현재 글을 `Lumloom` Vault의 `01. 수집함/Writing2`로 보내는 `Obsidian에 저장`
 - 글감·문장 보관함
 - 연속 기록과 통계
 - 기억 도우미와 기억 도감
@@ -44,4 +47,11 @@ python -m http.server 4173
 - 서재 모드와 상큼 모드 선택은 기기마다 저장하며 클라우드에 동기화하지 않습니다.
 - Supabase 프로젝트에는 `supabase/lumloom-sync.sql`을 한 번 실행하고, Auth 리디렉션 URL에 배포 주소를 등록해야 합니다.
 - Markdown ZIP과 Obsidian 저장 기능은 계정 동기화와 별도로 계속 사용할 수 있습니다.
-- Obsidian 저장 성공 콜백이 돌아오면 완료를 알리고, 완료를 확인하지 못하면 `Lumloom` Vault 부재 또는 이름 불일치 가능성과 전체 기록 ZIP 대안을 안내합니다.
+
+## Markdown과 Obsidian 저장
+
+- 전체 기록 ZIP은 기록마다 `YYYY-MM-DD_제목.md` 파일을 만들며, 공통 `lumloom-record/v1` frontmatter와 기존 기록 내용을 보존합니다.
+- `Obsidian에 저장`은 현재 글을 `Lumloom` Vault의 `01. 수집함/Writing2`에 타임스탬프가 포함된 새 파일로 요청합니다.
+- 저장 요청에는 고유한 `x-success` 콜백을 붙입니다. 성공 콜백이 돌아오면 완료를 알리고, 완료를 확인하지 못하면 `Lumloom` Vault 부재 또는 이름 불일치 가능성과 전체 기록 ZIP 대안을 안내합니다.
+- 콜백이 없다는 사실만으로 Vault 부재를 단정할 수는 없습니다. 브라우저의 외부 앱 URI 차단, 사용자 취소, 미지원 환경도 같은 결과를 만들 수 있습니다.
+- 웹앱은 기기의 Vault 목록이나 폴더를 검색하지 않으며, 수집함 이후의 분류는 별도의 Lumloom Bridge가 담당합니다.

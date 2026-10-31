@@ -1,0 +1,31 @@
+{
+  "schema_version": "lumloom-dev-log/v1",
+  "work_id": "readme-current-state-20261031",
+  "project_key": "writing",
+  "title": "하루문장 README 최신화",
+  "purpose": "현재 앱 기능, Lumloom 계정 동기화, Markdown ZIP과 Obsidian 직접 저장의 실제 동작과 한계를 README에 반영합니다.",
+  "category": "Documentation",
+  "status": "Completed",
+  "completed_at": "2026-10-31T22:34:07+09:00",
+  "changes": [
+    "공개 서비스 주소와 현재 Obsidian 저장 기능을 기능 목록에 추가했습니다.",
+    "lumloom-record/v1, 수집함 경로, x-success 확인, ZIP 대안과 Bridge 경계를 문서화했습니다."
+  ],
+  "technical_changes": {
+    "files": ["README.md"]
+  },
+  "tests": [
+    {
+      "name": "README-to-code consistency audit",
+      "result": "passed",
+      "details": "README의 저장 경로, ZIP 형식, 콜백과 동기화 설명을 현재 app.js 및 sync.js에 대조했습니다."
+    },
+    {
+      "name": "git diff --check",
+      "result": "passed"
+    }
+  ],
+  "next_actions": [],
+  "related_commit_shas": ["f0c2fcb", "8296014"],
+  "sensitive_data_review": "passed"
+}
