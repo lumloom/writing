@@ -160,7 +160,7 @@ const legacyPrompts = [
 const storageKey = "haru-writing-app";
 const OBSIDIAN_HANDOFF_KEY = "lumloom-writing-obsidian-handoff";
 const OBSIDIAN_SUCCESS_PARAM = "lumloom_obsidian_saved";
-const OBSIDIAN_UNCONFIRMED_MESSAGE = "저장 완료를 확인하지 못했어요. Lumloom Vault가 없거나 이름이 다를 수 있습니다. 전체 기록 ZIP 저장을 이용해 주세요.";
+const OBSIDIAN_RETURN_MESSAGE = "Obsidian으로 저장 요청을 보냈습니다. Lumloom Vault의 01. 수집함을 확인해 주세요. Vault가 없거나 이름이 다르면 저장되지 않을 수 있습니다.";
 const todayKey = formatDate(new Date());
 const memory = window.HaruMemory;
 const prompts = memory.promptGenerator.generatePrompts();
@@ -753,7 +753,7 @@ function consumeObsidianSuccess() {
   return confirmed;
 }
 
-function watchObsidianHandoff(token,onUnconfirmed) {
+function watchObsidianHandoff(token,onReturnNotice) {
   let departed = false;
   let settled = false;
   const pending = () => localStorage.getItem(OBSIDIAN_HANDOFF_KEY) === token;
@@ -768,7 +768,7 @@ function watchObsidianHandoff(token,onUnconfirmed) {
     cleanup();
     if (!pending()) return;
     localStorage.removeItem(OBSIDIAN_HANDOFF_KEY);
-    onUnconfirmed();
+    onReturnNotice();
   };
   const onDepart = () => { departed = true; };
   const onReturn = () => { if (departed) setTimeout(finish,500); };
@@ -791,7 +791,7 @@ function saveEntryToObsidian(entry) {
     return;
   }
   els.exportState.textContent = "Obsidian으로 보내는 중이에요";
-  watchObsidianHandoff(handoff.token,()=>showObsidianNotice(OBSIDIAN_UNCONFIRMED_MESSAGE));
+  watchObsidianHandoff(handoff.token,()=>showObsidianNotice(OBSIDIAN_RETURN_MESSAGE));
   window.location.href = uri;
 }
 
